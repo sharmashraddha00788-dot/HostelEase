@@ -1,0 +1,505 @@
+{
+  "info": {
+    "_postman_id": "c1f7a4b0-7788-4e12-89b5-hostelease001",
+    "name": "HostelEase API Collection",
+    "description": "Complete REST API collection for HostelEase - Hostel Room Allocation & Complaints System (Project #13, KRMU). Includes auto-save JWT tokens in login test scripts.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refreshToken",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{accessToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "API Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "health"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "1. Student Registration",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Riya Sharma\",\n  \"email\": \"riya.sharma@krmu.edu.in\",\n  \"password\": \"Student@123\",\n  \"phone\": \"+91 9876543299\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "2. Student Login (Auto-saves Token)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var res = pm.response.json();",
+                  "if (res.accessToken) {",
+                  "    pm.collectionVariables.set('accessToken', res.accessToken);",
+                  "    pm.collectionVariables.set('refreshToken', res.refreshToken);",
+                  "    console.log('Saved Student Access Token');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"student1@krmu.edu.in\",\n  \"password\": \"Student@123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "3. Warden Login (Auto-saves Token)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var res = pm.response.json();",
+                  "if (res.accessToken) {",
+                  "    pm.collectionVariables.set('accessToken', res.accessToken);",
+                  "    pm.collectionVariables.set('refreshToken', res.refreshToken);",
+                  "    console.log('Saved Warden Access Token');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"warden@hostelease.com\",\n  \"password\": \"Warden@123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "4. Admin Login (Auto-saves Token)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var res = pm.response.json();",
+                  "if (res.accessToken) {",
+                  "    pm.collectionVariables.set('accessToken', res.accessToken);",
+                  "    pm.collectionVariables.set('refreshToken', res.refreshToken);",
+                  "    console.log('Saved Admin Access Token');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@hostelease.com\",\n  \"password\": \"Admin@123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "5. Refresh Access Token (Silent Refresh)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/refresh",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "refresh"]
+            }
+          }
+        },
+        {
+          "name": "6. Get Current User Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "me"]
+            }
+          }
+        },
+        {
+          "name": "7. Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Rooms",
+      "item": [
+        {
+          "name": "1. Available Rooms (Student & Warden)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms/available?block=A",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms", "available"],
+              "query": [{ "key": "block", "value": "A" }]
+            }
+          }
+        },
+        {
+          "name": "2. Get All Rooms (Warden & Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms"]
+            }
+          }
+        },
+        {
+          "name": "3. Create New Room (Warden & Admin)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roomNumber\": \"106\",\n  \"block\": \"A\",\n  \"floor\": 1,\n  \"capacity\": 2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms"]
+            }
+          }
+        },
+        {
+          "name": "4. Update Room Maintenance (Warden & Admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"maintenance\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms/673d1234567890abcdef1234",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms", "673d1234567890abcdef1234"]
+            }
+          }
+        },
+        {
+          "name": "5. Delete Empty Room (Admin Only)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms/673d1234567890abcdef1234",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms", "673d1234567890abcdef1234"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Allocations",
+      "item": [
+        {
+          "name": "1. Student Requests Room",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roomId\": \"673d1234567890abcdef1234\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/allocations/request",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "allocations", "request"]
+            }
+          }
+        },
+        {
+          "name": "2. Student Checks My Allocation Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/allocations/my",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "allocations", "my"]
+            }
+          }
+        },
+        {
+          "name": "3. Student Vacates Room",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/allocations/vacate",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "allocations", "vacate"]
+            }
+          }
+        },
+        {
+          "name": "4. List All Allocations (Warden & Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/allocations?status=requested",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "allocations"],
+              "query": [{ "key": "status", "value": "requested" }]
+            }
+          }
+        },
+        {
+          "name": "5. Warden Approves Request (Atomic Bed Allotment)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"wardenNotes\": \"Documents verified. Room allocated for current semester.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/allocations/673d1234567890abcdef1234/approve",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "allocations", "673d1234567890abcdef1234", "approve"]
+            }
+          }
+        },
+        {
+          "name": "6. Warden Rejects Request",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rejectionReason\": \"Room reserved for final year students. Please select Block B.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/allocations/673d1234567890abcdef1234/reject",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "allocations", "673d1234567890abcdef1234", "reject"]
+            }
+          }
+        },
+        {
+          "name": "7. Admin/Warden Force Vacates Student",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/allocations/673d1234567890abcdef1234/admin-vacate",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "allocations", "673d1234567890abcdef1234", "admin-vacate"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Complaints",
+      "item": [
+        {
+          "name": "1. Student Creates Complaint",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Shower head dripping water\",\n  \"category\": \"plumbing\",\n  \"priority\": \"medium\",\n  \"description\": \"Water leaks from bathroom shower stall even when tap is shut tightly.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/complaints",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "complaints"]
+            }
+          }
+        },
+        {
+          "name": "2. Student Gets My Complaints",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/complaints/my",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "complaints", "my"]
+            }
+          }
+        },
+        {
+          "name": "3. Warden Lists All Complaints",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/complaints?status=open",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "complaints"],
+              "query": [{ "key": "status", "value": "open" }]
+            }
+          }
+        },
+        {
+          "name": "4. Warden Updates Complaint Status & Remarks",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"resolved\",\n  \"wardenRemarks\": \"Plumber visited at 2 PM and replaced the worn rubber gasket.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/complaints/673d1234567890abcdef1234",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "complaints", "673d1234567890abcdef1234"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "1. Warden Dashboard Stats & Aggregations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/dashboard/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dashboard", "stats"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users (Admin Only)",
+      "item": [
+        {
+          "name": "1. Admin Lists All Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users?role=student",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users"],
+              "query": [{ "key": "role", "value": "student" }]
+            }
+          }
+        },
+        {
+          "name": "2. Admin Updates User Role",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"warden\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/673d1234567890abcdef1234/role",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "673d1234567890abcdef1234", "role"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
