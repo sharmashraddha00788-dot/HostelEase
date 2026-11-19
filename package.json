@@ -1,0 +1,20 @@
+{
+  "name": "hostelease",
+  "version": "1.0.0",
+  "description": "HostelEase - Hostel Room Allocation and Complaints Management System",
+  "main": "server/server.js",
+  "scripts": {
+    "build": "npm install --prefix client --include=dev && npm run build --prefix client && npm install --prefix server",
+    "start": "node server/server.js",
+    "server": "node server/server.js",
+    "seed": "node server/seed.js"
+  },
+  "keywords": [
+    "hostel",
+    "room-allocation",
+    "complaints",
+    "mern"
+  ],
+  "author": "Shraddha",
+  "license": "ISC"
+}
