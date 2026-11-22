@@ -4,10 +4,17 @@
   "description": "HostelEase - Hostel Room Allocation and Complaints Management System",
   "main": "server/server.js",
   "scripts": {
-    "build": "npm install --prefix client --include=dev && npm run build --prefix client && npm install --prefix server",
+    "build": "npm install && npm install --prefix client --include=dev && npm run build --prefix client && npm install --prefix server",
     "start": "node server/server.js",
     "server": "node server/server.js",
     "seed": "node server/seed.js"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.8.4"
   },
   "keywords": [
     "hostel",
