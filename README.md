@@ -1,7 +1,9 @@
 # 🏠 HostelEase — Hostel Room Allocation and Complaints System
 
 > **Capstone Project #13** | **KR Mangalam University (KRMU)**  
-> **Student:** Shraddha Sharma | **Semester:** Capstone Submission 2026
+> **Student:** Shraddha Sharma | **Semester:** Capstone Submission 2026  
+> 🌐 **Live Website URL:** [https://hostelease-1-7pls.onrender.com](https://hostelease-1-7pls.onrender.com)  
+> 🐙 **GitHub Repository:** [https://github.com/sharmashraddha00788-dot/HostelEase](https://github.com/sharmashraddha00788-dot/HostelEase)  
 
 HostelEase is an end-to-end, production-ready MERN application designed for university residences. It automates hostel room allocations, ensures race-condition-free atomic bed booking, tracks real-time maintenance complaints, and provides wardens with live spatial room maps and MongoDB aggregation analytics.
 
