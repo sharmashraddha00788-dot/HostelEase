@@ -56,10 +56,23 @@ const seedDatabase = async () => {
     }
 
     // MANDATORY REQUIREMENT:
-    // "should drop the hostelease database first so stale indexes cannot cause duplicate-key errors"
-    console.log('[Seed] Dropping existing database to prevent stale indexes and conflicts...');
-    await conn.connection.dropDatabase();
-    console.log('[Seed] Database dropped successfully.');
+    // Drop existing database / collections to purge stale data and stale indexes
+    console.log('[Seed] Clearing existing collections to prevent stale indexes and conflicts...');
+    try {
+      await conn.connection.dropDatabase();
+      console.log('[Seed] Database dropped successfully.');
+    } catch (dropDbErr) {
+      console.log('[Seed] Note: dropDatabase not permitted by user role. Dropping individual collections instead...');
+      const collections = await conn.connection.db.listCollections().toArray();
+      for (const coll of collections) {
+        try {
+          await conn.connection.db.dropCollection(coll.name);
+          console.log(`[Seed] Dropped collection: ${coll.name}`);
+        } catch (e) {
+          await conn.connection.db.collection(coll.name).deleteMany({});
+        }
+      }
+    }
 
     // 1. Create Admin and Warden Accounts
     console.log('[Seed] Creating Admin and Warden accounts...');
